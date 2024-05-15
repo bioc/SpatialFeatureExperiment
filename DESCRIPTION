@@ -19,6 +19,7 @@ Description: A new S4 class integrating Simple Features with the R package sf
     and SingleCellExperiment, hence methods for these parent classes can still
     be used.
 Imports:
+    Biobase,
     BiocGenerics,
     BiocNeighbors,
     BiocParallel,
@@ -89,7 +90,7 @@ Suggests:
     dplyr,
     tidyr
 Remotes:
-    github::pachterlab/voyager
+    Voyager=github::pachterlab/voyager
 Config/testthat/edition: 3
 Depends: 
     R (>= 4.2.0)

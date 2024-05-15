@@ -80,4 +80,4 @@ to its original place, then transformation specifications will be removed.
 \seealso{
 [isFull()], [origin()]
 }
-\concept{Image and raster}
+\concept{Image classes}

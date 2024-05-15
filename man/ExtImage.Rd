@@ -5,7 +5,7 @@
 \alias{ExtImage}
 \alias{ExtImage-class}
 \alias{show,ExtImage-method}
-\title{Representation of ExtImage images in SFE objects}
+\title{Use the EBImage \code{Image} class in SFE objects}
 \usage{
 \S4method{show}{ExtImage}(object)
 
@@ -27,10 +27,10 @@ An \code{ExtImage} object.
 }
 \description{
 This is a thin wrapper around the \code{\link{Image}} class in the
-\code{ExtImage package} so it inherits from \code{VirtualSpatialImage} to be
+\code{EBImage} package so it inherits from \code{VirtualSpatialImage} to be
 compatible with \code{SpatialExperiment} from which SFE inherits. An
 \code{ext} field is added to specify the spatial extent of the image in
 microns to facilitate geometric operations on the SFE object (including the
 images) and plotting with \code{Voyager}.
 }
-\concept{Image and raster}
+\concept{Image classes}
