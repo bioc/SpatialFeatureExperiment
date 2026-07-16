@@ -510,8 +510,8 @@ readVisiumHD <- function(data_dir, bin_size = 8L,
                 ">>> ..found ", length(segs.art.index),
                 " cells with (nested) polygon lists", "\n",
                 ">>> ..applying filtering") }
-    # add sequence of numbers as temporary column
-    polys$ID_row <- as.character(seq_len(length.out = nrow(polys)))
+    # add sequence of numbers as temporary column, or use existing row names
+    polys$ID_row <- rownames(polys)
     polys.ID_row <- polys$ID_row
     # remove empty elements
     polys <- polys[!st_is_empty(polys), ]
@@ -531,8 +531,7 @@ readVisiumHD <- function(data_dir, bin_size = 8L,
     # ie, "cell_id" for Xenium; "cellID" for CosMX; "EntityID" for Vizgen
     cell_ID <- grep("cell_id|cellID|EntityID",
                     colnames(polys), value = TRUE)
-    if (st_geometry_type(polys, by_geometry = FALSE) == "MULTIPOLYGON" &&
-        !is_Xenium) {
+    if (st_geometry_type(polys, by_geometry = FALSE) == "MULTIPOLYGON") {
         # convert sf df to polygons directly
         message(">>> Casting MULTIPOLYGON geometry to POLYGON")
         polys <- sfheaders::sf_cast(polys, to = "POLYGON")
@@ -605,6 +604,7 @@ readVisiumHD <- function(data_dir, bin_size = 8L,
         # convert from integer64 to character
         polys[[cell_ID]] <- as.character(polys[[cell_ID]])
     # remove ID_row
+    rownames(polys) <- polys$ID_row
     polys$ID_row <- NULL
     if (!any(names(polys) == "polygon_area"))
         polys$polygon_area <- st_area(st_geometry(polys))
@@ -1412,12 +1412,14 @@ readXenium <- function(data_dir,
                         df2sf(x, c("vertex_x", "vertex_y"), id_col = "cell_id",
                               geometryType = "POLYGON") })
             }
-            # sanity on geometries
-            polys <- lapply(polys, function(i) {
-                .filter_polygons(i, min_area, is_Xenium = TRUE, BPPARAM = BPPARAM)
-                })
             message(">>> Checking polygon validity")
             polys <- lapply(polys, .check_st_valid)
+            
+            # Only filter cell polygons by area and n pieces, not nuclear polygons
+            if ("cell" %in% names(polys)) {
+                polys[["cell"]] <- .filter_polygons(polys[["cell"]], min_area, 
+                                                    is_Xenium = TRUE, BPPARAM = BPPARAM)
+            }
 
             fn_out <- c(cell = "cell_boundaries_sf.parquet",
                         nucleus = "nucleus_boundaries_sf.parquet")
@@ -1509,6 +1511,13 @@ readXenium <- function(data_dir,
     metadata <- as.data.frame(metadata) |> as("DataFrame")
     rownames(metadata) <- metadata$cell_id
     metadata[,1] <- NULL
+    # Remove cells that are too small from the gene count matrix and metadata
+    metadata <- metadata[polys[[1]]$cell_id,]
+    sce <- sce[,polys[[1]]$cell_id]
+    # Remove nuclei of removed cells
+    if (setequal(names(polys), c("cellSeg", "nucSeg"))) {
+        polys[["nucSeg"]] <- polys[["nucSeg"]][polys[["nucSeg"]]$cell_id %in% polys[["cellSeg"]]$cell_id,]
+    }
     if (flip == "geometry") {
         metadata$y_centroid <- -metadata$y_centroid
     }
