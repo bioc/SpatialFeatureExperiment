@@ -42,8 +42,7 @@
 #' @concept Getters and setters
 #' @name dimGeometries
 #' @seealso [colGeometries()], [rowGeometries()]
-#' @aliases dimGeometries<- dimGeometry dimGeometry<- dimGeometryNames
-#'   dimGeometryNames<-
+#' @aliases dimGeometries<- dimGeometry dimGeometry<- dimGeometryNames dimGeometryNames<-
 #' @examples
 #' library(SFEData)
 #' sfe <- McKellarMuscleData(dataset = "small")

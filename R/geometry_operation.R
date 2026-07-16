@@ -32,8 +32,7 @@
 #'   x.
 #' @concept Geometric operations
 #' @export
-#' @importFrom sf st_intersects st_agr<- st_drop_geometry st_as_sfc st_cast
-#'   st_is_empty st_disjoint st_z_range st_zm
+#' @importFrom sf st_intersects st_agr<- st_drop_geometry st_as_sfc st_cast st_is_empty st_disjoint st_z_range st_zm
 #' @importFrom stats aggregate
 #' @examples
 #' library(sf)

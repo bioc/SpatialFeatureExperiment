@@ -12,8 +12,7 @@
 #'
 #' @rdname SpatialFeatureExperiment-class
 #' @include utils.R
-#' @importFrom methods setClass new setAs setMethod setGeneric setReplaceMethod
-#' callNextMethod is
+#' @importFrom methods setClass new setAs setMethod setGeneric setReplaceMethod callNextMethod is
 #' @importClassesFrom SpatialExperiment SpatialExperiment
 #' @exportClass SpatialFeatureExperiment
 #' @concept SpatialFeatureExperiment class
@@ -98,11 +97,8 @@ setClass("SpatialFeatureExperiment", contains = "SpatialExperiment")
 #'   "spotPoly", for which there's a convenience getter and setter,
 #'   \code{\link{spotPoly}}.
 #' @importFrom SpatialExperiment SpatialExperiment spatialCoords<-
-#' @importFrom SingleCellExperiment int_colData int_elementMetadata int_metadata
-#'   int_metadata<- int_elementMetadata<- int_colData<-
-#' @importFrom sf st_point st_sfc st_sf st_polygon st_buffer st_linestring
-#'   st_multipoint st_multilinestring st_multipolygon st_coordinates st_centroid
-#'   st_geometry_type st_geometry st_is_valid st_geometrycollection
+#' @importFrom SingleCellExperiment int_colData int_elementMetadata int_metadata int_metadata<- int_elementMetadata<- int_colData<-
+#' @importFrom sf st_point st_sfc st_sf st_polygon st_buffer st_linestring st_multipoint st_multilinestring st_multipolygon st_coordinates st_centroid st_geometry_type st_geometry st_is_valid st_geometrycollection
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @concept SpatialFeatureExperiment class
 #' @export

@@ -27,8 +27,7 @@
 #'   names return a character vector of the names. Getters for single geometries
 #'   return an \code{sf} data frame. Setters return an SFE object.
 #' @name annotGeometries
-#' @aliases annotGeometries<- annotGeometry annotGeometry<- annotGeometryNames
-#'   annotGeometryNames<-
+#' @aliases annotGeometries<- annotGeometry annotGeometry<- annotGeometryNames annotGeometryNames<-
 #' @concept Getters and setters
 #' @examples
 #' # Example dataset

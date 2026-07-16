@@ -23,8 +23,7 @@ setMethod("NCOL", "AlignedSpatialImage", function(x) 1L)
 #' @param object A \code{SpatRasterImage} object.
 #' @return A \code{SpatRasterImage} object.
 #' @importClassesFrom SpatialExperiment VirtualSpatialImage
-#' @importFrom SpatialExperiment addImg mirrorImg imgData imgData<- imgRaster
-#'   imgSource getImg rotateImg rmvImg
+#' @importFrom SpatialExperiment addImg mirrorImg imgData imgData<- imgRaster imgSource getImg rotateImg rmvImg
 #' @importFrom terra ext ext<- inMemory
 #' @importClassesFrom terra SpatRaster
 #' @importClassesFrom EBImage Image
@@ -1016,8 +1015,7 @@ setMethod("affineImg", "SpatialFeatureExperiment",
 #'   will break older SFE code calling \code{imgRaster}.
 #' @export
 #' @name imgRaster
-#' @aliases imgRaster,SpatRasterImage-method imgRaster,BioFormatsImage-method
-#'   imgRaster,ExtImage-method
+#' @aliases imgRaster,SpatRasterImage-method imgRaster,BioFormatsImage-method imgRaster,ExtImage-method
 #' @concept Image methods
 #' @importFrom terra as.raster
 #' @family image methods

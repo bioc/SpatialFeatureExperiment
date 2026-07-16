@@ -181,8 +181,7 @@
 #' @export
 #' @concept Utilities
 #' @importFrom BiocParallel bplapply SerialParam
-#' @importFrom sfheaders sf_multipoint sf_polygon sf_multipolygon sf_linestring
-#'   sf_multilinestring
+#' @importFrom sfheaders sf_multipoint sf_polygon sf_multipolygon sf_linestring sf_multilinestring
 #' @examples
 #' # Points, use spotDiameter to convert to circle polygons
 #' # This is done to Visium spots
