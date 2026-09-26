@@ -3,7 +3,7 @@ Type: Package
 Title: Integrating SpatialExperiment with Simple Features in sf
 Version: 1.15.1
 Authors@R: 
-    c(person("Lambda", "Moses", email = "dl3764@columbia.edu", 
+    c(person("Lambda", "Moses", email = "lambda.calc29@gmail.com", 
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-7092-9427")),
     person("Alik", "Huseynov",
@@ -85,13 +85,14 @@ Suggests:
     arrow,
     BiocStyle,
     dplyr,
+    duckspatial,
     gmp,
     knitr,
     OSTA.data,
     RBioFormats,
     rhdf5,
     rmarkdown,
-    scater,
+    scrapper,
     sfarrow,
     SFEData (>= 1.5.3),
     Seurat,
