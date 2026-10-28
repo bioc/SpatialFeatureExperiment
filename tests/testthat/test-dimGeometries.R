@@ -28,12 +28,41 @@ test_that("colGeometries setter", {
     expect_true(is(cgs$buffered, "sf"))
 })
 
+library(DuckDBSpatial)
+test_that("colGeometries setter, DuckDB parquet file name", {
+    fn <- tempfile(fileext = ".parquet")
+    writeGeoParquet(cg_toy, fn)
+    colGeometries(sfe) <- list(foo = fn)
+    expect_s4_class(colGeometry(sfe, "foo"), "DuckDBColumn")
+    colGeometry(sfe, "foo") <- NULL
+    file.remove(fn)
+})
+
+test_that("colGeometries setter, DuckDBColumn", {
+    fn <- tempfile(fileext = ".parquet")
+    writeGeoParquet(cg_toy, fn)
+    foo <- readGeoParquet(fn)
+    colGeometries(sfe) <- list(foo = foo$geometry)
+    expect_s4_class(colGeometry(sfe, "foo"), "DuckDBColumn")
+    colGeometry(sfe, "foo") <- NULL
+    file.remove(fn)
+})
+
 test_that("colGeometry setter", {
     colGeometry(sfe, "coords") <- cg_toy
     cgs <- int_colData(sfe)$colGeometries
     expect_true(is(cgs, "DFrame"))
     expect_equal(names(cgs), "coords")
     expect_true(is(cgs$coords, "sf"))
+})
+
+test_that("colGeometry setter, DuckDB parquet file name", {
+    fn <- tempfile(fileext = ".parquet")
+    writeGeoParquet(cg_toy, fn)
+    colGeometry(sfe, "foo") <- fn
+    expect_s4_class(colGeometry(sfe, "foo"), "DuckDBColumn")
+    colGeometry(sfe, "foo") <- NULL
+    file.remove(fn)
 })
 
 sfe2 <- sfe

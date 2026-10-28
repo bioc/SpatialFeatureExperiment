@@ -99,6 +99,18 @@
 #' colGeometry(sfe_combined, "foobar", sample_id = "Vis5A") <- spots1
 #' # Only entries for the specified sample are set.
 #' foobar <- colGeometry(sfe_combined, "foobar", sample_id = "sample02")
+#' 
+#' # Use DuckDBSpatial to add out of memory geometry
+#' library(DuckDBSpatial)
+#' fn <- tempfile(fileext = ".parquet") # a file name
+#' writeGeoParquet(spotPoly(sfe), fn)
+#' colGeometry(sfe, "ondisk") <- fn
+#' 
+#' # Or use DuckDBColumn instead of file name
+#' cg2 <- readGeoParquet(fn)
+#' colGeometry(sfe, "ondisk") <- cg2$geometry
+#' 
+#' file.remove(fn)
 NULL
 
 #' @rdname dimGeometries
