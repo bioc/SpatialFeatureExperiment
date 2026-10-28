@@ -372,6 +372,7 @@ importFrom(rlang,
   "%||%",
   .data,
   check_installed,
+  is_installed,
   sym
 )
 importFrom(sf,

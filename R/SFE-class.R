@@ -106,6 +106,22 @@ setClass("SpatialFeatureExperiment", contains = "SpatialExperiment")
 #' sfe2 <- SpatialFeatureExperiment(list(counts = mat),
 #'     colGeometries = list(foo = cg)
 #' )
+#' 
+#' # Use DuckDBSpatial to not load geometry into memory
+#' # Geometry is written to disk first in this toy example
+#' library(DuckDBSpatial)
+#' fn <- tempfile(fileext = ".parquet") # a file name
+#' writeGeoParquet(cg, fn)
+#' sfe <- SpatialFeatureExperiment(list(counts = mat),
+#'                                 colGeometries = c(foo = fn)
+#' )
+#' # Or use DuckDBColumn
+#' cg2 <- readGeoParquet(fn)
+#' sfe <- SpatialFeatureExperiment(list(counts = mat),
+#'                                 colGeometries = c(foo = cg2$geometry)
+#' )
+#' 
+#' file.remove(fn)
 SpatialFeatureExperiment <- function(assays,
                                      colData = DataFrame(), rowData = NULL,
                                      sample_id = "sample01",
@@ -146,7 +162,7 @@ SpatialFeatureExperiment <- function(assays,
             colGeometries, spatialCoordsNames,
             spotDiameter, "POLYGON"
         )
-        spe_coords <- st_coordinates(st_centroid(st_geometry(colGeometries[[1]])))
+        spe_coords <- .get_centroid_coords(colGeometries[[1]])
         spe <- SpatialExperiment(
             assays = assays, colData = colData,
             rowData = rowData, sample_id = sample_id,
@@ -163,14 +179,12 @@ SpatialFeatureExperiment <- function(assays,
     return(sfe)
 }
 
-.st_geometry_type_show <- function(x) standardGeneric(".st_geometry_type_show")
-.st_geometry_type_show.sf <- function(x) as.character(st_geometry_type(x, by_geometry = FALSE))
-.st_geometry_type_show.DuckDBColumn <- function(x) {
+setMethod(".st_geometry_type_show", "sf", function(x) as.character(st_geometry_type(x, by_geometry = FALSE)))
+setMethod(".st_geometry_type_show", "DuckDBColumn", function(x) {
     check_installed("DuckDBSpatial")
     df <- DuckDBSpatial::st_geometry_type(head(x)) |> as.data.frame()
     unique(df[,1]) |> as.character()
-}
-
+})
 .names_types <- function(l) {
     types <- vapply(l, .st_geometry_type_show, FUN.VALUE = character(1))
     paste(paste0(names(l), " (", types, ")"), collapse = ", ")

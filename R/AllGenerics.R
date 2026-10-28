@@ -220,6 +220,7 @@ setGeneric(
     }
 )
 
+# Image affine transform-------------------
 #' @export
 setGeneric("unit", function(x) standardGeneric("unit"))
 
@@ -274,6 +275,7 @@ if (!isGeneric("unwrap")) {setGeneric("unwrap", function(x, ...) standardGeneric
 #' @export
 setGeneric("Img<-", function(x, sample_id = 1L, image_id, scale_fct = 1, value) standardGeneric("Img<-"))
 
+# Splitting and QC------------------
 #' @export
 setGeneric("splitByCol", function(x, f, ...) standardGeneric("splitByCol"))
 
@@ -291,3 +293,10 @@ setGeneric("splitComponent", function(x, ...) standardGeneric("splitComponent"))
 
 #' @export
 setGeneric("getTissueBoundaryConcave", function(x, ...) standardGeneric("getTissueBoundaryConcave"))
+
+# Internal utils--------------
+setGeneric(".get_centroid_coords", function(x) standardGeneric(".get_centroid_coords"))
+
+setGeneric(".vdimfun", function(x) standardGeneric(".vdimfun"))
+
+setGeneric(".st_geometry_type_show", function(x) standardGeneric(".st_geometry_type_show"))

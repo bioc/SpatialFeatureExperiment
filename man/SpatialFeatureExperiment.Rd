@@ -141,5 +141,21 @@ sfe <- SpatialFeatureExperiment(list(counts = mat),
 sfe2 <- SpatialFeatureExperiment(list(counts = mat),
     colGeometries = list(foo = cg)
 )
+
+# Use DuckDBSpatial to not load geometry into memory
+# Geometry is written to disk first in this toy example
+library(DuckDBSpatial)
+fn <- tempfile(fileext = ".parquet") # a file name
+writeGeoParquet(cg, fn)
+sfe <- SpatialFeatureExperiment(list(counts = mat),
+                                colGeometries = c(foo = fn)
+)
+# Or use DuckDBColumn
+cg2 <- readGeoParquet(fn)
+sfe <- SpatialFeatureExperiment(list(counts = mat),
+                                colGeometries = c(foo = cg2$geometry)
+)
+
+file.remove(fn)
 }
 \concept{SpatialFeatureExperiment class}

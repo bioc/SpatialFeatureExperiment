@@ -298,3 +298,16 @@ getTechTxFields <- function(tech, data_dir = NULL) {
                                              package = "SpatialFeatureExperiment")))
     as.vector(img[18,4,2] > 200)
 }
+
+#' @importFrom BiocGenerics type
+#' @importFrom rlang is_installed
+.is_duckdbcolumn_spatial <- function(x) {
+    if (is_installed("DuckDBSpatial")) {
+        inherits(x, "DuckDBColumn") & type(x) == "geometry"
+    } else FALSE
+}
+
+setMethod(".get_centroid_coords", "sf", 
+          function(x) st_coordinates(st_centroid(st_geometry(x))))
+setMethod(".get_centroid_coords", "DuckDBColumn",
+          function(x) as.matrix(st_coordinates(st_centroid(x))))

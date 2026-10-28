@@ -2,6 +2,7 @@
 # (essentially int_rowData)
 # I created this file to generalize internal functions written for dimGeometries
 # to localResults and potentially other fields in int_colData.
+# TODO: deal with `translate` for DuckDB. Maybe expand orig_bbox in metadata by copying BioFormatsImage's transformation field. Or deprecate it since I've never added geometries after calling removeEmptySpace. It's a historic relic before I implemented affine transformations.
 .getfun <- function(MARGIN) {
     switch(MARGIN,
         int_elementMetadata,
@@ -103,7 +104,7 @@
         if (!is.null(convertfun)) {
             value <- convertfun(value)
         }
-        if (!identical(vdimfun(value), xdimfun(x))) {
+        if (!identical(.vdimfun(value), xdimfun(x))) {
             stop("invalid 'value' in '", funstr, "(<", class(x), ">) <- value':\n  ",
                  "'value' should have number of ", vdimstr, " equal to '", xdimstr, "(x)'")
         }
@@ -132,6 +133,10 @@
     value
 }
 
+setMethod(".vdimfun", "ANY", function(x) nrow(x))
+
+setMethod(".vdimfun", "DuckDBColumn", function(x) length(x))
+
 .set_intdimdata_all <- function(x, MARGIN, withDimnames = TRUE,
                                 translate = TRUE, sf = TRUE, getfun, setfun,
                                 key, xdimfun, funstr, xdimstr, value, ...) {
@@ -150,7 +155,7 @@
         key = key,
         convertfun = NULL,
         xdimfun = xdimfun,
-        vdimfun = nrow,
+        vdimfun = .vdimfun,
         funstr = funstr,
         xdimstr = xdimstr,
         vdimstr = "rows"
