@@ -137,19 +137,20 @@ test_that("When rownames of value don't match those of sfe", {
     rownames(cg_sub) <- rownames(cg_toy)[1:3]
     rownames(cg_mut) <- c(rownames(cg_toy)[1:2], "D")
     # It's not a subset, get correct error message
-    expect_error(colGeometry(sfe, "foo") <- cg_mut,
+    expect_error(colGeometry(sfe, "foo", withDimnames = TRUE) <- cg_mut,
                  "should all be in")
     # It's the same set, in different orders, do the reordering
     rns <- sample(rownames(cg_toy), 5, replace = FALSE)
     cg_perm <- cg_toy[rns,]
     rownames(cg_perm) <- rns
-    colGeometry(sfe, "foo") <- cg_perm
-    expect_equal(colGeometry(sfe, "foo"), cg_toy)
+    colGeometry(sfe, "foo", withDimnames = TRUE) <- cg_perm
+    expect_equal(colGeometry(sfe, "foo", withDimnames = TRUE), cg_toy)
     # It's a subset, do the reordering
     cg_sub_perm <- cg_sub[c(2,3,1),]
     rownames(cg_sub_perm) <- rownames(cg_sub)[c(2,3,1)]
-    colGeometry(sfe, "bar") <- cg_sub_perm
-    expect_equal(colGeometry(sfe, "bar")[1:3,], cg_sub, ignore_attr = "row.names")
+    colGeometry(sfe, "bar", withDimnames = TRUE) <- cg_sub_perm
+    expect_equal(colGeometry(sfe, "bar", withDimnames = TRUE)[1:3,], cg_sub, 
+                 ignore_attr = "row.names")
 })
 
 rg_toy <- cg_toy
@@ -164,16 +165,16 @@ test_that("rowGeometries setter, one sample", {
 test_that("rowGeometries setter, one sample, partial replace", {
     foo <- rg_toy[c("d", "j"),]
     rownames(foo) <- c("d", "j")
-    rowGeometries(sfe) <- list(foo = foo)
-    expect_equal(st_equals(rowGeometry(sfe)[c("d","j"),], foo),
+    rowGeometries(sfe, withDimnames = TRUE) <- list(foo = foo)
+    expect_equal(st_equals(rowGeometry(sfe, withDimnames = TRUE)[c("d","j"),], foo),
                  list(1, 2), ignore_attr = TRUE)
     expect_true(all(st_is_empty(rowGeometry(sfe)[c(1,3,5),])))
 
     # The second time, adding more
     bar <- rg_toy[c("v", "o"),]
     rownames(bar) <- c("v", "o")
-    rowGeometries(sfe, partial = TRUE) <- list(foo = bar)
-    expect_equal(st_equals(rowGeometry(sfe)[2:5,], rg_toy[2:5,]),
+    rowGeometries(sfe, partial = TRUE, withDimnames = TRUE) <- list(foo = bar)
+    expect_equal(st_equals(rowGeometry(sfe, withDimnames = TRUE)[2:5,], rg_toy[2:5,]),
                  as.list(1:4), ignore_attr = TRUE)
     expect_true(st_is_empty(rowGeometry(sfe)[1,]))
 })
@@ -198,15 +199,15 @@ test_that("rowGeometry setter, one sample", {
 test_that("rowGeometry setter, partial replace", {
     foo <- rg_toy[c("d", "j"),]
     rownames(foo) <- c("d", "j")
-    rowGeometry(sfe, type = "foo", partial = TRUE) <- foo
-    expect_equal(st_equals(rowGeometry(sfe)[c("d","j"),], foo),
+    rowGeometry(sfe, type = "foo", partial = TRUE, withDimnames = TRUE) <- foo
+    expect_equal(st_equals(rowGeometry(sfe, withDimnames = TRUE)[c("d","j"),], foo),
                  list(1, 2), ignore_attr = TRUE)
     expect_true(all(st_is_empty(rowGeometry(sfe)[c(1,3,5),])))
 
     # The second time, adding more
     bar <- rg_toy[c("v", "o"),]
     rownames(bar) <- c("v", "o")
-    rowGeometry(sfe, type = "foo", partial = TRUE) <- bar
+    rowGeometry(sfe, type = "foo", partial = TRUE, withDimnames = TRUE) <- bar
     expect_equal(st_equals(rowGeometry(sfe)[2:5,], rg_toy[2:5,]),
                  as.list(1:4), ignore_attr = TRUE)
     expect_true(st_is_empty(rowGeometry(sfe)[1,]))
@@ -256,13 +257,13 @@ test_that("rowGeometries setter, partial replace, multiple samples", {
     rownames(bar) <- rownames(sfe_visium)[1]
     baz <- rg_toy2[2,,drop = FALSE]
     rownames(baz) <- rownames(sfe_visium)[2]
-    rowGeometries(sfe_visium) <- list(foo_sample01 = bar, foo_sample02 = baz)
+    rowGeometries(sfe_visium, withDimnames = TRUE) <- list(foo_sample01 = bar, foo_sample02 = baz)
     # Second time, adding more
     rowGeometries(sfe_visium, sample_id = "sample01",
                   partial = TRUE) <- list(foo = baz)
     expect_equal(rowGeometry(sfe_visium), rbind(bar, baz), ignore_attr = TRUE)
     rowGeometries(sfe_visium, sample_id = "sample02",
-                  partial = TRUE) <- list(foo = bar)
+                  partial = TRUE, withDimnames = TRUE) <- list(foo = bar)
     expect_equal(rowGeometry(sfe_visium, sample_id = "sample02"),
                  rbind(bar, baz), ignore_attr = TRUE)
 })

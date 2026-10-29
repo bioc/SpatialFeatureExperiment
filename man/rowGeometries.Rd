@@ -11,23 +11,23 @@
 \alias{txSpots<-}
 \title{Row geometry getters and setters}
 \usage{
-rowGeometry(x, type = 1L, sample_id = 1L, withDimnames = FALSE)
+rowGeometry(x, type = 1L, sample_id = 1L, withDimnames = TRUE)
 
 rowGeometry(
   x,
   type = 1L,
   sample_id = 1L,
-  withDimnames = FALSE,
+  withDimnames = TRUE,
   partial = FALSE,
   translate = TRUE
 ) <- value
 
-rowGeometries(x, sample_id = "all", withDimnames = FALSE)
+rowGeometries(x, sample_id = "all", withDimnames = TRUE)
 
 rowGeometries(
   x,
   sample_id = "all",
-  withDimnames = FALSE,
+  withDimnames = TRUE,
   partial = FALSE,
   translate = TRUE
 ) <- value
@@ -36,12 +36,12 @@ rowGeometryNames(x)
 
 rowGeometryNames(x) <- value
 
-txSpots(x, sample_id = 1L, withDimnames = FALSE)
+txSpots(x, sample_id = 1L, withDimnames = TRUE)
 
 txSpots(
   x,
   sample_id = 1L,
-  withDimnames = FALSE,
+  withDimnames = TRUE,
   partial = FALSE,
   translate = TRUE
 ) <- value

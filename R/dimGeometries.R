@@ -503,7 +503,7 @@ NULL
 
 #' @rdname rowGeometries
 #' @export
-rowGeometry <- function(x, type = 1L, sample_id = 1L, withDimnames = FALSE) {
+rowGeometry <- function(x, type = 1L, sample_id = 1L, withDimnames = TRUE) {
     type <- .check_rg(type, x, sample_id)
     sample_id <- .check_sample_id(x, sample_id, one = FALSE)
     dimGeometry(x, type,
@@ -514,14 +514,14 @@ rowGeometry <- function(x, type = 1L, sample_id = 1L, withDimnames = FALSE) {
 
 #' @rdname rowGeometries
 #' @export
-`rowGeometry<-` <- function(x, type = 1L, sample_id = 1L, withDimnames = FALSE,
+`rowGeometry<-` <- function(x, type = 1L, sample_id = 1L, withDimnames = TRUE,
                             partial = FALSE, translate = TRUE, value) {
     type <- .check_rg_setter(type, x, sample_id)
     sample_id <- .check_sample_id(x, sample_id, one = FALSE)
     if (partial && type %in% rowGeometryNames(x)) {
         if (!withDimnames)
             stop("withDimnames must be TRUE for partial replace")
-        existing <- rowGeometry(x, type, sample_id)
+        existing <- rowGeometry(x, type, sample_id, withDimnames = withDimnames)
         cols_use <- intersect(names(existing), names(value))
         rows_use <- intersect(rownames(existing), rownames(value))
         existing[rows_use, cols_use] <- value[rows_use, cols_use]
@@ -559,7 +559,7 @@ rowGeometry <- function(x, type = 1L, sample_id = 1L, withDimnames = FALSE) {
 
 #' @rdname rowGeometries
 #' @export
-rowGeometries <- function(x, sample_id = "all", withDimnames = FALSE) {
+rowGeometries <- function(x, sample_id = "all", withDimnames = TRUE) {
     out <- dimGeometries(x, MARGIN = 1, withDimnames = withDimnames)
     if (identical(sample_id, "all") || length(sampleIDs(x)) == 1L) return(out)
     sample_id <- .check_sample_id(x, sample_id, one = FALSE)
@@ -569,7 +569,7 @@ rowGeometries <- function(x, sample_id = "all", withDimnames = FALSE) {
 
 #' @rdname rowGeometries
 #' @export
-`rowGeometries<-` <- function(x, sample_id = "all", withDimnames = FALSE,
+`rowGeometries<-` <- function(x, sample_id = "all", withDimnames = TRUE,
                               partial = FALSE, translate = TRUE, value) {
     check_names <- !identical(sample_id, "all") && length(setdiff(sampleIDs(x), sample_id))
     sample_id0 <- sample_id
@@ -614,13 +614,13 @@ rowGeometryNames <- function(x) {
 
 #' @rdname rowGeometries
 #' @export
-txSpots <- function(x, sample_id = 1L, withDimnames = FALSE) {
+txSpots <- function(x, sample_id = 1L, withDimnames = TRUE) {
     rowGeometry(x, "txSpots", sample_id, withDimnames)
 }
 
 #' @rdname rowGeometries
 #' @export
-`txSpots<-` <- function(x, sample_id = 1L, withDimnames = FALSE,
+`txSpots<-` <- function(x, sample_id = 1L, withDimnames = TRUE,
                         partial = FALSE, translate = TRUE, value) {
     rowGeometry(x, "txSpots", sample_id, withDimnames, partial, translate) <- value
     x

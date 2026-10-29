@@ -424,6 +424,7 @@ readVisiumHD <- function(data_dir, bin_size = 8L,
 #' mask. Default is "POINT".
 #' @param e_ymax The ymax in the extent of the image
 #' @returns a sf object with Y-axis of the points or polygons flipped.
+#' @importFrom sf st_crs st_crs<-
 #' @noRd
 .flip_sf_Y <- function(sf, type = "POINT", e_ymax){
     coords <- st_coordinates(sf)
@@ -1328,6 +1329,7 @@ readXenium <- function(data_dir,
     c(img_df, flip) %<-% .get_xenium_images(data_dir, image, major_version,
                                             flip, max_flip, sample_id)
     # Read cell/nucleus segmentation ----
+    polys <- list()
     if (is.null(segmentations)) polys <- NULL
     else {
         # get files .parquet or .csv
@@ -1541,7 +1543,7 @@ readXenium <- function(data_dir,
                 i$cell_id <- NULL
                 return(i)}
             )
-        colGeometries(sfe) <- c(colGeometries(sfe), polys)
+        colGeometries(sfe, withDimnames = TRUE) <- c(colGeometries(sfe), polys)
     }
 
     # add images

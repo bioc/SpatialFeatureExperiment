@@ -151,7 +151,7 @@ test_that("Keep whole colGeometry items", {
     # bbox of the remaining items of the colGeometry
     sfe_cropped <- SpatialFeatureExperiment::crop(sfe_visium, bbox_cg, sample_id = "sample01",
                         keep_whole = "col")
-    cg2 <- colGeometry(sfe_cropped, sample_id = "sample01")
+    cg2 <- colGeometry(sfe_cropped, sample_id = "sample01", withDimnames = TRUE)
     # colGeometry not cropped
     expect_equal(cg, cg2)
     # annotGeometry cropped

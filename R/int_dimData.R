@@ -2,7 +2,7 @@
 # (essentially int_rowData)
 # I created this file to generalize internal functions written for dimGeometries
 # to localResults and potentially other fields in int_colData.
-# TODO: deal with `translate` for DuckDB. Maybe expand orig_bbox in metadata by copying BioFormatsImage's transformation field. Or deprecate it since I've never added geometries after calling removeEmptySpace. It's a historic relic before I implemented affine transformations.
+# TODO: deal with `translate` for DuckDB. Maybe expand orig_bbox in metadata by copying BioFormatsImage's transformation field. Or deprecate it since I've never added geometries after calling removeEmptySpace. It's a historic relic before I implemented affine transformations. Thing is affine transformation is eager for some classes and lazy for other classes.
 .getfun <- function(MARGIN) {
     switch(MARGIN,
         int_elementMetadata,
